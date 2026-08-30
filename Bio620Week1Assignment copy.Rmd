@@ -1,0 +1,214 @@
+---
+title: "R Lab 1 - Kyle Willard"
+output: html_document
+date: "2026-08-30"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+#### LAB QUESTION Q1: What would you type into R to get it to give the remainder of twelve divided by five? What is the remainder?
+
+```{r}
+12%%5
+# Type 12%%5. The remainder is 2
+```
+
+#### LAB QUESTION Q2: Generate two vectors of length 10. Have one be the numbers one through ten. Have the second one be the numbers 1, ½, ⅓, etc. Do not use the c() function to manually type in either vector. Plot the two against each other using the plot() function.
+
+```{r}
+x <- 1:10
+y = 1/x
+x
+y
+plot (x, y)
+```
+
+#### LAB QUESTION Q3: For each of the lines of code in the previous box, explain the difference in the inputs and outputs. Why do the different lines of code produce the different outputs?
+
+```{r}
+rep(1:5,rep(3,5)) #Repeat the series of numbers 1 through 5 by a repetion of 3 five times so that each number 1 to 5 is repeated three times in sequence. rep(3,5) creates the vector c(3,3,3,3,3) 
+
+rep(1:5,1:5) #Repeat the series of numbers 1 through 5 by a series of numbers 1 through 5 such that 1 is repeated once, 2 twice, 3 thrice, 4 four times, and 5 five times.
+
+rep(1:5,c(1,2,3,2,1)) #Repeat the series of numbers 1 through 5 by a vector of 1, 2, 3, 2, 1 such that 1 is repeated once, 2 twice, 3 thrice, 4 twice, and 5 once.
+
+rep(c("A","B","C"),c(4,3,2)) #Repeat the vector "A", "B", "C" by a vector of 4, 3, 2 such that "A" is repeated 4 times, "B" 3 times, and "C" twice
+
+```
+
+#### LAB QUESTION Q4: Write code to generate a vector of all even numbers from 0 to 100. Save the vector as a variable, then give the sum, mean, standard deviation, variance, median, maximum, minimum, first quartile, and third quartile of that vector
+```{r}
+even <- seq(0,100,2)
+even
+sum(even)
+mean(even)
+sd(even)
+var(even)
+median(even)
+max(even)
+min(even)
+summary(even)
+```
+
+#### LAB QUESTION Q5: Given vector y, generate a vector that determines if the number is even or odd using the modulo %% function. What are the addresses of those values?
+```{r}
+y <-c(8,3,5,7,6,6,8,9,2,3,9,4,10,4,11)
+which(y%%2==0) #the even numbers are located at indices 1 5 6 7 9 12 13 14
+which(y%%2==1) #the odd numbers are located at indices 2 3 4 8 10 11 15
+```
+
+#### LAB QUESTION Q6: Do each of the following mathematical operations in R.
+```{r}
+#6A
+400/17
+#6B 
+12*((6*15)/(40/21))
+#6C
+250^(1/3)
+#6D
+log10(1000)
+```
+
+#### LAB QUESTION Q7: Generate the following sequences in R.
+```{r}
+#7A. The sequence of numbers starting at zero, counting up to sixteen, and counting by four.
+seq(0,16,4)
+#7B. The sequence of numbers starting at 0.3, counting up to 1.5, and counting by 0.3.
+seq(0.3,1.5,0.3)
+#7C. The sequence of numbers starting at 0, counting down to -40, and counting by -10.
+seq(0,-40,-10)
+#7D. The sequence of strings that repeats the words “tropics”, “temperate”, and “boreal” each three times (i.e., “tropics” “tropics” “tropics”, “temperate” “temperate” “temperate”, etc)
+rep(c("tropics","temperate","boreal"), rep(3,3))
+```
+
+#### LAB QUESTION Q8: Using the following sequence of numbers, give the sum, mean, and length. 5 3 8 2 9 3 6 9 1 0 2 7
+```{r}
+data1 <- c(5,3,8,2,9,3,6,9,1,0,2,7)
+sum(data1)
+mean(data1)
+length(data1)
+```
+
+#### LAB QUESTION Q9: Using the following sequence of numbers, sort the numbers in ascending and descending fashion. 3 9 6 1 9 4 7 8 2 6 3 8 0 2 5
+```{r}
+data2 <- c(3,9,6,1,9,4,7,8,2,6,3,8,0,2,5)
+sort(data2) #ascending
+rev(sort(data2)) #descending
+```
+
+
+#### LAB QUESTION Q10: For this problem you will learn how to use some new functions you have never seen before. For each of the following, explain what the function does and what arguments it takes
+```{r}
+#10A. setwd() - setwd(dir)
+#Set Working Directory - Returns an absolute filepath representing the current working directory of the R process; setwd(dir) is used to set the working directory to dir.
+
+#10B. read.table() - (file, header = FALSE, sep = "", quote = "\"'", dec = ".", numerals = c("allow.loss", "warn.loss", "no.loss")
+#Read Table - Reads a file in table format and creates a data frame from it, with cases corresponding to lines and variables to fields in the file. Takes file, header, separator from working directory.
+
+#10C. names() - names(x)
+#The Names of an Object - Functions to get or set the names of an object (i.e. vector, matrix or data frame).
+
+#10D. attach() - attach(what, pos = 2L, name = deparse1(substitute(what), backtick = FALSE), warn.conflicts = TRUE)
+#Attach Set of R Objects to Search Path - The database is attached to the R search path. This means that the database is searched by R when evaluating a variable, so objects in the database can be accessed by simply giving their names.
+
+#10E. range() - range(..., na.rm = FALSE)
+#Range of Values - Range returns a vector containing the minimum and maximum of all the given arguments.
+```
+
+#### LAB QUESTION Q11: Download “orangutan.csv” to your computer. Make sure you know where you saved it to. Then do the following.
+```{r}
+getwd()
+#11A. Using the functions you learned previously, read the “orangutan.csv” into R as a data.frame. Name the object apes.
+apes <- read.csv("orangutanCSV.csv", sep = "")
+apes
+#11B. What are the column names of apes? Which ones are continuous and which are categorical?
+colnames(apes) #weight.kg is continuous and individual, location, sex, & Tool.use are categorical 
+```
+
+```{r}
+#11C. Manipulate the data in each of the following ways:
+
+#11C.1: Display only orangutans that are found in Borneo.
+Borneo <- subset(apes, location == "Borneo")
+Borneo
+
+#11C.2: Extract only male orangutans and save them as males. Then order males by their weights from heaviest to lightest.
+males <- subset(apes, sex == "male")
+rev(sort(males$weight.kg))
+
+#11C.3: What is the weight of the lightest of all the orangutans?
+min(apes$weight.kg) #the lightest weight is 30kg
+
+#11C.4: Extract only female orangutans and save them as females. Then give the range of weights for female orangutans.
+females <- subset(apes, sex == "female")
+range(females$weight.kg)
+
+#11C.5: What is the mean weight of apes in Sumatra?
+Sumatra <- subset(apes, location == "Sumatra")
+mean(Sumatra$weight.kg)
+
+#11C.6: How many of the orangutans have been seen using tools?
+tooluse <- subset(apes, Tool.use == "TRUE")
+nrow(tooluse) #8 orangutans have been observed using tools
+
+#11C.7: What is the combined weight of the three largest female orangutans?
+highestFweights <-rev(sort(females$weight.kg))[1:3]
+sum(highestFweights) #The combined weight of the largest female orangutans is 126kg
+```
+
+#### LAB QUESTION Q12: Generate a vector of ten unique organisms (your choice). Sample twice with replacement and twice without replacement. How do the two methods of sampling differ?
+```{r}
+titanosaurs <- c("Andesaurus", "Malawisaurus", "Saltasaurus", "Diamantinasaurus", "Alamosaurus", "Paralititan", "Dreadnoughtus", "Puertasaurus", "Patagotitan", "Argentinosaurus")
+set.seed(66)
+sample(titanosaurs, size = 2, replace = TRUE)
+sample(titanosaurs, size = 2, replace = TRUE)
+sample(titanosaurs, size = 2, replace = FALSE)
+sample(titanosaurs, size = 2, replace = FALSE)
+#Sampling with replacement resets the pool to the 10 organsisms in the vector, allowing for duplicates within a given sample. Sampling without replacement removes the first picked item from the second draw guaranteeing each sample is unique.
+```
+
+
+#### LAB QUESTION Q13: Read “baseball.csv” into R and answer the following questions. This is a table of all games played by the Boston Red Sox between 1876 and 2014. It was originally sourced from baseball-reference.com but has since been put behind a paywall.
+```{r}
+baseball <- read.csv("baseballCSV.csv", sep = "")
+baseball
+
+#13A: What are the column names of the data?
+colnames(baseball) #"Franchise" "Games" "Wins" "Losses" "Win.Loss.Percent" "Runs.Scored" "Runs.Allowed" "Home.Games"       "Away.Games" "Home.Wins" "Home.Loss" "Away.Wins" "Away.Losses"
+
+#13B: How many games were played, won, and lost, respectively?
+sum(baseball$Games) #17722 games played
+sum(baseball$Wins) #9111 games won
+sum(baseball$Losses) #8528 games lost
+
+#13C: What are the greatest differences between wins and losses (both the greatest positive value and the greatest negative value)?
+difference <- (baseball$Wins-baseball$Losses)
+difference #203 and -194
+
+#13D: Which teams had the greatest differences as identified in 13C?
+baseball$Franchise[c(3,18)]
+#Baltimore.Orioles, and New.York.Yankees
+
+#13E: Which three teams do the Red Sox have the highest win percentage against? Which three teams do the Red Sox have the lowest win percentage against?
+highestpercent <- rev(sort(baseball$Win.Loss.Percent))[1:3]
+highestpercent
+rev(order(baseball$Win.Loss.Percent))
+baseball$Franchise[c(6,11,23)] #Highest win percentage Cincinnati.Reds Houston.Astros and San.Francisco.Giants
+
+lowestpercent <- sort(baseball$Win.Loss.Percent)[1:3]
+lowestpercent
+(order(baseball$Win.Loss.Percent))
+baseball$Franchise[c(25,4,18)] #Lowest win percentage St. Louis.Cardinals, Chicago.Cubs, and New.York.Yankees
+
+#13F: Calculate the ratio of runs allowed to runs scored. Plot that ratio against the percentage of games won. Optionally, include a trendline and describe the statistics of the trendline
+ratio <- baseball$Runs.Allowed/baseball$Runs.Scored
+ratio
+plot(ratio, baseball$Wins)
+trendline <- lm(baseball$Wins ~ ratio)
+summary(trendline)
+abline(trendline, col = "black", lwd = 2) #the trendline suggests a weak positive correlation between the ratio of runs allowed to runs scored and the percentage of games won.
+```
