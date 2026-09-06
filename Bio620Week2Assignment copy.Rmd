@@ -1,0 +1,117 @@
+---
+title: "Bio620Week2Assignment"
+author: "Kyle Willard"
+date: "2026-09-06"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+#### LAB QUESTION Q1: Make the plot from the above code. Formulate a plot where the y-axis states the Sepal Length, the x-axis is blank, the title indicates that the plot is of genus Iris (ignore italics for now), and the color of the boxplot is blue. Do not copy and paste the code – retype it.
+
+```{r}
+boxplot(iris$Sepal.Length, ylab="Sepal Length (cm)", xlab="", main="Boxplot of Iris Sepal Length", col="red")
+```
+
+#### LAB QUESTION Q2: Plot Iris Petal Width by species. Make sure the boxplot has a proper title and axes. Color setosa red, versicolor blue, and virginica yellow.
+```{r}
+boxplot(iris$Petal.Width~iris$Species, , ylab="Petal Width (cm)", xlab=" Species", main="Boxplot of Petal Width by Species", col = c("red", "blue", "yellow"))
+```
+
+#### LAB QUESTION Q3: Open the help page for the function lm(). What are its first four arguments?
+```{r}
+?lm()
+# First four arguments - formula, data, subset, weigths
+```
+
+#### LAB QUESTION Q4: How does the order of the variables in the formula correspond to the order of the variables in the plot?
+```{r}
+# lm() function uses ~ notation follows response ~ predictor, or y ~ x
+# plot() functions follows , notation "x-variable, y variable"
+```
+
+#### LAB QUESTION Q5: Which arguments control which of the line parameters? Generate the plot where the line is grey, the line type is dashed, and the line width is five units
+```{r}
+mod = lm(iris$Petal.Width~iris$Petal.Length)
+plot(iris$Petal.Length,iris$Petal.Width)
+abline(mod,col="gray",lty=2, lwd=5)
+#col = line color, lty - line type, lwd - line width, 
+```
+
+#### LAB QUESTION Q6: What is the R^2 and p-value of the line? Is the line significantly different from a slope of 0?
+```{r}
+summary(mod)
+# R^2 - 0.9271; p-value - < 2.2e-16; Yes
+```
+
+#### LAB QUESTION Q7: Generate an x-y plot with a line of best fit for the relationship between Sepal Length and Sepal Width, with Sepal Width as the response variable. Make each species its own color and shape. Report the intercept, slope, R2, and p value for the line of best fit. Include a legend in the top-left corner of the plot.
+```{r}
+lbf <- lm(iris$Sepal.Width~iris$Sepal.Length)
+plot(iris$Sepal.Length, iris$Sepal.Width, col=as.numeric(as.factor(iris$Species)),
+pch=as.numeric(as.factor(iris$Species)))
+abline(lbf)
+legend("topright", legend = c("setosa", "versicolor", "virginica"), col = c("black", "red", "green"), pch = c(1, 2, 3), title = "Species", cex=0.7)
+summary(lbf)
+```
+
+#### LAB QUESTION Q8: Write a simple function that takes in two arguments, x and y, and then adds them together.
+```{r}
+add <- function(x, y) {
+  res <- x + y
+  return(res)
+}
+x <- 1
+y <- 3
+add(x, y)
+```
+
+#### LAB QUESTION Q9: Write code that will generate a loop to print out every even number between 20 and 30, inclusive.
+```{r}
+for(i in seq(20, 30, 2)) {
+print(i)
+}
+```
+
+#### LAB QUESTION Q10: Write code that will generate a random sample of these ten prime numbers: 2, 3, 5, 7, 11, 13, 17, 19, 23, 29.
+```{r}
+b = c(2,3,5,7,11,13,17,19,23,29)
+sample(b)
+```
+
+```{r}
+rnorm
+args(rnorm)
+?rnorm
+norm=rnorm(n=20)
+hist(norm)
+plot(density(norm))
+norm1 = rnorm(20,0,1)
+norm2=rnorm(20,0.5,0.5)
+plot(density(norm1),col="red",ylim=c(0,1),xlim=c(-4,4))
+lines(density(norm2),col="blue")
+```
+
+#### LAB QUESTION Q11: Generate 100 data points from all four distributions mentioned. Explicitly state your arguments used and plot the results with both a histogram and a density function.
+
+```{r}
+normal = rnorm(100,0,1)
+hist(normal)
+plot(density(normal))
+
+uniform = runif(100,0,1)
+hist(uniform)
+plot(density(uniform))
+
+chisq = rchisq(100,0,1)
+hist(chisq)
+plot(density(chisq))
+
+binomial = rbinom(100,0,1)
+hist(binomial)
+plot(density(binomial))
+```
+
