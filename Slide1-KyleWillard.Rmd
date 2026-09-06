@@ -1,0 +1,39 @@
+---
+title: "Slide 1 - KyleWillard"
+author: "Kyle Willard"
+date: "2026-09-06"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+```{r}
+setwd("/Users/kylewillard/Downloads/Adelphi/Bio620")
+molerat <- read.csv("molerat.csv")
+molerat
+#Hypothesis: Mean daily energy expenditure of Damaraland mole rats is roughly comparable when adjusted for body mass
+#Variables: Caste, lnmass, lnenergy
+#Response: lnenergy - daily energy expenditure
+#Focal Predictors: caste, lnmass 
+#Covariates: ln(Energy Expenditure) and ln(Mass) - positive covariance
+boxplot(molerat$lnmass~molerat$caste, ylab = "ln(bodymass)", xlab = "caste", col = c("gray", "red"), main="Relationship between ln(bodymass) and caste of Damaraland mole rat", cex.main = 0.9)
+boxplot(molerat$lnenergy~molerat$caste, ylab = "ln(energy)", xlab = "caste", col = c("gray", "red"), main="Relationship between ln(Energy Expenditure) and caste of Damaraland mole rat", cex.main = 0.9)
+```
+
+```{r}
+plot(molerat$lnmass, molerat$lnenergy, col=as.factor(molerat$caste), pch = 19, ylab="ln(Energy Expenditure)", xlab="ln(Mass)", main="ln(Mass) vs ln(Energy Expenditure) of Damaraland mole rat (Cryptomys damarensis)", cex.main =0.9)
+legend("topleft", legend = c("Lazy", "Worker"), col = c("black", "red"), pch = 19, title = "Caste", cex=0.7)
+bestfit<-lm(molerat$lnenergy~molerat$lnmass)
+abline(bestfit)
+summary(bestfit)
+
+mean(molerat$lnenergy[molerat$caste=="lazy"])
+median(molerat$lnenergy[molerat$caste=="lazy"])
+mean(molerat$lnenergy[molerat$caste=="worker"])
+median(molerat$lnenergy[molerat$caste=="worker"])
+```
+
