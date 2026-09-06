@@ -1,0 +1,74 @@
+---
+title: "Bacteria+Oats-Week2"
+author: "Kyle Willard"
+date: "2026-09-01"
+output:
+  word_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+```{r}
+bacteria<-read.csv("bacteria.csv")
+bacteria
+#Hypothesis: Certain bacterial species of a certain level of toxicity can cause various diseases in patients. Higher toxicity is potentially indicative of carcinoma. Certain bacteria are more likely to cause cancer due to having higher toxicity.
+
+#Variables: Species and diagnosis are categorical variables. Toxin is a numerical/continuous variable.
+
+#Response Variable: toxin
+
+#Focal Predictor(s): species & diagnosis
+
+#Covariates: N/A
+```
+
+```{r}
+table(bacteria$species, bacteria$diagnosis) 
+#The data is balanced. It samples 5 replications for each diagnosis-bacteria species combination.
+
+boxplot(bacteria$toxin~bacteria$species, ylab="Toxin (units/μl)", xlab=" Species", cex.axis = 0.8, main="Boxplot of Bacterial Toxin (units/μl) by Species", col = c("red", "yellow", "green", "blue"))
+
+#The median toxin of Bacteria A and D is higher than in Bacteria B and C.
+
+boxplot(bacteria$toxin~bacteria$diagnosis, ylab="Toxin (units/μl)", xlab=" Diagnosis", cex.axis = 0.8, main="Boxplot of Bacterial Toxin (units/μl) by Diagnosis", col = c("orange", "purple", "pink", "brown"))       
+#The median toxin of carcinoma diagnoses is higher than appendicitis and skin abscesses.
+```
+
+```{r}
+oats <- read.csv("oat.csv")
+oats
+#Hypothesis: There is a positive correlation between grain and yield. A higher number of grain increases the yield
+
+#Variables: Grain and yield are continuous/numerical 
+
+#Response Variable: yield 
+
+#Focal Predictor(s): grain
+
+#Covariance: grain and yield covary (positive covariance)
+```
+
+
+```{r}
+dotchart(oats$grain, xlab = "Grain", main="Dotplot of Mean Grain/Ear")
+hist(oats$grain, xlab = "Grain", main="Histogram of Mean Grain/Ear") 
+boxplot(oats$grain, ylab = "Grain", main="Boxplot of Mean Grain/Ear")
+
+#there appears to be either a single outlier or typo of a mean grain/ear of 2528 and yield of 5.417
+
+removedgrain <- oats$grain[oats$grain != 2528]
+removedyield <- oats$yield[oats$yield !=5.417]
+#removed this outlier from the plot and covariance calculation
+cov(removedgrain, removedyield)
+
+plot(removedgrain, removedyield, ylab="Yield (t/ha)", xlab="Mean Grain/Ear", main="Mean Grain/Ear vs Yield (t/ha) of Oats")
+bestfit<-lm(removedyield~removedgrain)
+abline(bestfit)
+summary(bestfit)
+```
+
