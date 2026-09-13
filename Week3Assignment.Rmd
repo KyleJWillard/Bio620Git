@@ -50,6 +50,8 @@ ggpairs(wheat)
 ```
 
 ```{r}
+cormatrix<- cor(wheat)
+corrplot(cormatrix, method="number")
 #Positive correlation is statistically significant between 1) yield & winter (0.43) 2) pH & winter (0.296) 3) P & winter (0.205) 4) P & pH (0.703) 5) K & pH (0.275) 6) K & P (0.337). The mean density of overwintering crops (crop/m^2) is the most reliable predictor of yield. The majority of K have a consistent concentration between 84-114 mg/kg with 8 outliers above 150 mg/kg. The rest of the variables have somewhat normal distributions.
 ```
 
