@@ -1,0 +1,63 @@
+---
+title: "Bio620Week 3Assignment"
+author: "Kyle Willard"
+date: "2026-09-13"
+output:
+  word_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+```{r}
+#Hypothesis: 
+#Null Hypothesis (H0): Soil properties (pH, P, K, Mg) and crop density metrics (winter, ears) do not significantly predict the yield of wheat across the 100 plots. 
+
+#Alternative Hypothesis (H1): Soil properties (pH, P, K, Mg) and crop density metrics (winter, ears) significantly predict the yield of wheat across the 100 plots.
+
+#Variables: yield (t/ha - continuous); winter (mean of wintering plants per m^2 - count); ears (mean number of ears per m^2 pH - count); (soil pH- continous); P (phosphorus content (mg/kg of soil - continuous) K (potassium content (mg/kg of soil - continuous) Mg (magnesium content (mg/kg of soil - continuous)  
+
+#Response Variable: yield
+
+#Focal Predictor(s): winter; ears
+
+#Covariates: pH; P; K; Mg
+
+setwd("/Users/kylewillard/Downloads/Adelphi/Bio620")
+wheat <- read.csv("wheat.csv")
+wheat
+summary(wheat)
+```
+
+```{r}
+pairs(wheat [,1:7], panel=function(x,y){
+  points(x,y)
+  abline(lm(y~x), col='red')})
+```
+
+```{r}
+library("psych")
+describe(wheat)
+```
+
+```{r}
+library("GGally")
+ggpairs(wheat)
+```
+
+```{r}
+#Positive correlation is statistically significant between 1) yield & winter (0.43) 2) pH & winter (0.296) 3) P & winter (0.205) 4) P & pH (0.703) 5) K & pH (0.275) 6) K & P (0.337). The mean density of overwintering crops (crop/m^2) is the most reliable predictor of yield. The majority of K have a consistent concentration between 84-114 mg/kg with 8 outliers above 150 mg/kg. The rest of the variables have somewhat normal distributions.
+```
+
+
+```{r}
+plot(wheat$winter, wheat$yield, ylab="Yield (t/ha)", xlab="Mean Overwintering Plants/m^2", main="Yield (t/ha) of Wheat")
+bestfit<-lm(wheat$yield~wheat$winter)
+abline(bestfit)
+summary(bestfit)
+#R-squared - 0.1848, p 8.062e-06
+```
