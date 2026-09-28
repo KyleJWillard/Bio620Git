@@ -1,0 +1,42 @@
+---
+title: "Week 5 Assignment"
+author: "Kyle Willard"
+date: "2026-09-22"
+output:
+  word_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+Assignment 2: For the Agriope small fertilization dataset, do multivariate linear models to
+test if copulation insertion duration correlates to the number of fertilized eggs.
+To do this assessment of male fertility, we must also account for male size, female size, eggs
+laid, and egg sacs produced.
+
+```{r}
+setwd("/Users/kylewillard/Downloads/Adelphi/Bio620")
+Argiope<-read.csv("Argiope_fertilization_small.csv")
+Argiope
+Argiope.lm<-lm(NumFertilized ~ MaleSize + FemaleSize + InsertionDuration + NumEggs + NumSacs, data = Argiope)
+Argiope.lm
+summary(Argiope.lm)
+#The number of eggs fertilized is predicted by Insertion Duration (Pr(>|t|) - 0.00827) and the number of eggs laid (Pr(>|t|) - 4.09e-06).
+```
+
+Assignment 3: For the Quine dataset, do multivariate categorical ANOVAs and Tukey’s
+Honest Significant Differences tests to determine if the number of days absent is predicted by
+Ethnicity, Sex, Age, or Learner Status.
+
+```{r}
+quine<-read.csv("quine.csv")
+quine
+quine.aov <- aov(Days ~ Eth + Sex + Age + Lrn, data = quine)
+quine.aov
+TukeyHSD(quine.aov)
+#There is a significant difference between the number of absences of Aboriginal & non-Aboriginal Australians (p-value - 0.0004658) as well as between age groups F1 & F2 (p-value - 0.0450841). Aboriginal Australians and students of age group F2 had a significantly higher number of absences than non-Aboriginal Australians and students of age group F1, respectively.
+```
