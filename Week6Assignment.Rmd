@@ -1,0 +1,81 @@
+---
+title: "Week 6 Assignment"
+author: "Kyle Willard"
+date: "2026-09-29"
+output:
+  word_document: default
+  html_document: default
+---
+
+```{r setup}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+CellInhibition <- read.csv("Cell_Inhibition_Schoenfeld.csv")
+CellInhibition
+CellInhibition.lm<-lm(PercentSurvival ~ Inhibitor + Cell.Line + VHL + Concentration.uM, data = CellInhibition)
+summary(CellInhibition.lm)
+```
+
+```{r}
+library(AICcmodavg)
+m0 <- lm(PercentSurvival ~ 1, data = CellInhibition)
+AICc(m0)
+m1 <- lm(PercentSurvival ~ Inhibitor + Cell.Line + VHL + Concentration.uM, data = CellInhibition)
+AICc(m1)
+m2 <- lm(PercentSurvival ~ Inhibitor + Cell.Line + Concentration.uM, data = CellInhibition)
+AICc(m2)
+m3 <- lm(PercentSurvival ~ Inhibitor + VHL + Concentration.uM, data = CellInhibition)
+AICc(m3)
+m4 <- lm(PercentSurvival ~ Cell.Line + VHL + Concentration.uM, data = CellInhibition)
+AICc(m4)
+m5 <- lm(PercentSurvival ~ Inhibitor + Cell.Line + VHL, data = CellInhibition)
+AICc(m5)
+m6 <- lm(PercentSurvival ~ Inhibitor + Concentration.uM, data = CellInhibition)
+AICc(m6)
+m7 <- lm(PercentSurvival ~ Inhibitor + Cell.Line, data = CellInhibition)
+AICc(m7)
+m8 <- lm(PercentSurvival ~ Inhibitor + VHL, data = CellInhibition)
+AICc(m8)
+m9 <- lm(PercentSurvival ~ Cell.Line + Concentration.uM, data = CellInhibition)
+AICc(m9)
+m10 <-lm(PercentSurvival ~ VHL + Concentration.uM, data = CellInhibition)
+AICc(m10)
+#Delta AICc
+AICc(m2)-AICc(m1) #m2
+AICc(m3)-AICc(m1)#m3
+AICc(m4)-AICc(m1)#m4
+AICc(m5)-AICc(m1)#m5
+AICc(m6)-AICc(m1)#m6
+AICc(m7)-AICc(m1)#m7
+AICc(m8)-AICc(m1)#m8
+AICc(m9)-AICc(m1)#m9
+AICc(m10)-AICc(m1)#m10
+summary(m2)
+summary(m3)
+summary(m6)
+candidate_models <- list (m1, m2, m3, m4, m5, m6, m7, m8, m9, m10)
+model_names <- c("InhibitorCellLineVHLConcentration", "InhibitorCellLineConcentration", "InhibitorVHLConcentration", "CellLineVHLConcentration", "InhibitorCellLineVHL", "InhibitorConcentration", "InhibitorCellLine", "InhibitorVHL", "CellLineConcentration", "VHLConcentration")
+aicc_table <- aictab(cand.set = candidate_models, modnames = model_names)
+print(aicc_table)
+```
+
+
+```{r}
+# I choose to start with the full model then move to all the 3-variable combinations. I then did tests for concentration and inhibitor without cell line or VHL and concentration or Inhibitor with Cell Line or VHL. 
+#The full model m1 has the lowest AICc (3896.3) and highest weight (0.77) with m2 (Inhibitor + Cell.Line + Concentration.uM) having a delta_AICc of (< 4) and m3 (Inhibitor + VHL + Concentration.uM) & m6 (Inhibitor + Concentration.uM) having a delta_AICc of (< 10). All models share similar R-squared values of ~0.47-0.49. Inhibitor and Concentration have the lowest p-values (*** <<0.001), although VHL and Cell Line have p-values (* <0.05). A model that includes all four variables seems to be the best model.
+ 
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
