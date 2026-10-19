@@ -1,0 +1,66 @@
+---
+title: "Week 7 Assignment"
+author: "Kyle Willard"
+date: "2026-09-29"
+output:
+  word_document: default
+  html_document: default
+---
+
+```{r setup}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r pressure}
+species<-read.csv("species.csv")
+species
+library(AICcmodavg)
+poisson0 <- glm(Species ~ 1, data = species, family = poisson (link="log"))
+poisson1 <- glm(Species ~ pH + Biomass, data = species, family = poisson (link="log"))
+poisson2 <- glm(Species ~ pH, data = species, family = poisson (link="log"))
+poisson3 <- glm(Species ~ Biomass, data = species, family = poisson (link="log"))
+candidate_models <- list (poisson1, poisson2, poisson3)
+model_names <- c("pHBio", "pH", "Biomass")
+aicc_table <- aictab(cand.set = candidate_models, modnames = model_names)
+print(aicc_table)
+summary(poisson1)
+#lower biomass and Mid-Low pH are correlated with a higher number of species
+``` 
+
+```{r}
+bolger<-read.csv("bolger.csv")
+bolger
+logistic0 <- glm(RODENTSP ~ 1, data = bolger, family = binomial)
+logistic1 <- glm(RODENTSP ~ PERSHRUB + DISTX + AGE, data = bolger, family = binomial)
+logistic2 <- glm(RODENTSP ~ PERSHRUB, data = bolger, family = binomial)
+logistic3 <- glm(RODENTSP ~ DISTX, data = bolger, family = binomial)
+logistic4 <- glm(RODENTSP ~ AGE, data = bolger, family = binomial)
+logistic5 <- glm(RODENTSP ~ DISTX + AGE, data = bolger, family = binomial)
+logistic6 <- glm(RODENTSP ~ PERSHRUB + DISTX, data = bolger, family = binomial)
+logistic7 <- glm(RODENTSP ~ PERSHRUB + AGE, data = bolger, family = binomial)
+candidate_models <- list (logistic1, logistic2, logistic3, logistic4, logistic5, logistic6, logistic7)
+model_names <- c("%shrubdistage", "%shrub", "dist", "age", "distage", "%shrubdist", "%shrubage")
+aicc_table <- aictab(cand.set = candidate_models, modnames = model_names)
+print(aicc_table)
+summary(logistic2)
+#percentage of shrub coverage is associated with the presence of rodents
+```
+
+
+```{r}
+molerat<-read.csv("molerat.csv")
+molerat
+gamma0 <- glm(lnenergy ~ 1, data = molerat, family = Gamma(link=log))
+gamma1 <- glm(lnenergy ~ lnmass + caste, data = molerat, family = Gamma(link=log))
+gamma2 <- glm(lnenergy ~ lnmass, data = molerat, family = Gamma(link=log))
+gamma3 <- glm(lnenergy ~ caste, data = molerat, family = Gamma(link=log))
+candidate_models <- list (gamma1, gamma2, gamma3)
+model_names <- c("masscaste", "mass", "caste")
+aicc_table <- aictab(cand.set = candidate_models, modnames = model_names)
+print(aicc_table)
+summary(gamma1)
+#higher masses (higher relative significance) and worker caste are correlated with higher energy expenditure
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
