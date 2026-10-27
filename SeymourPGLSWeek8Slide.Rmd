@@ -1,0 +1,60 @@
+---
+title: "Week8Slide"
+author: "Kyle Willard"
+date: "2026-10-27"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r}
+library(phangorn)
+library(phytools)
+tree_file <- "/Users/kylewillard/Downloads/Adelphi/MastersThesis/Seymour et al 2026 Supplemental Code/Phylogeny/Scaled Supertree.tre"
+tree <- read.tree(tree_file)
+plot(tree)
+```
+
+```{r}
+library(geiger)
+trait_data <- read.csv("~/Downloads/Adelphi/MastersThesis/Seymour et al 2026 Supplemental Code/PGLS Data/All Clades-Table 1.csv")
+rownames(trait_data) <- trait_data$Taxon
+chk<-name.check(tree, trait_data)
+chk
+```
+
+```{r}
+library(ape)
+library(nlme)
+library(caper)
+bm <- corBrownian(1, tree, form = ~ Taxon)
+bm
+pgls<-gls(LOG.Qdot..ml.min. ~ LOG.Body.mass..kg., data=trait_data, correlation=bm)
+summary(pgls)
+pgls
+plot(LOG.Qdot..ml.min. ~ LOG.Body.mass..kg., data=trait_data, main ="Log Body Mass(kg) vs Log Blood Flow (Qdot) in Amniotes")
+abline(pgls, col ="red")
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+
+```{r}
+resids <- residuals(pgls, type = "response")
+resids_vector <- setNames(resids, rownames(trait_data))
+resid_map <- contMap(tree, resids_vector, plot = FALSE)
+resid_map <- setMap(resid_map, colors = c("blue", "white", "red"))
+plot(resid_map, 
+     fsize = 0.8, 
+     lwd = 3, 
+     leg.txt = "Phylogenetic Residuals")
+```
+
+

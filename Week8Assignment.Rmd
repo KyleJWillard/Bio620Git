@@ -1,0 +1,61 @@
+---
+title: "Week 8 Assignment"
+author: "Kyle Willard"
+date: "2026-10-25"
+output:
+  word_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r}
+library(phangorn)
+library(phytools)
+trees_file <- "/Users/kylewillard/Downloads/Adelphi/Bio620/Week8BirdTree/output.nex"
+trees <- read.nexus(trees_file)
+consensus_tree <- ls.consensus(trees)
+plot(consensus_tree)
+```
+
+
+```{r}
+library(geiger)
+trait_data <- read.csv("/Users/kylewillard/Downloads/Adelphi/Bio620/AVONET_Sup_Data/AVONET3_BirdTreeTable.csv")
+trait_data$Species3 <- gsub(" ","_",trait_data$Species3)
+rownames(trait_data) <- trait_data$Species3
+chk<-name.check(consensus_tree, trait_data)
+cleaned_matched <- treedata(consensus_tree, trait_data, sort = TRUE)
+cleaned_matched
+trait_data <- as.data.frame(cleaned_matched$data)
+name.check(consensus_tree, trait_data)
+```
+
+
+
+
+
+```{r}
+library(ape)
+library(nlme)
+bm <- corBrownian(1, consensus_tree, form = ~ Species3)
+bm
+trait_data$Beak.Length_Culmen <- as.numeric(
+  as.character(trait_data$Beak.Length_Culmen)
+)
+
+trait_data$Beak.Depth <- as.numeric(
+  as.character(trait_data$Beak.Depth)
+)
+pgls<-gls(Beak.Length_Culmen~Beak.Depth, data=trait_data, correlation=bm)
+summary(pgls)
+```
+
